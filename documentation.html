@@ -1,0 +1,1520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌾 Crop Calendar Application - Technical Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #4caf50;
+            --accent-color: #81c784;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --border-color: #e0e0e0;
+            --code-bg: #f5f5f5;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --border-radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--light-bg);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--white);
+            box-shadow: var(--shadow);
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: 2rem 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h1 {
+            font-size: 1.4rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-menu a {
+            color: var(--white);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .nav-menu a:hover {
+            background-color: rgba(255,255,255,0.2);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 2rem 3rem;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: 2rem;
+            margin: -2rem -3rem 2rem -3rem;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header .meta {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 2rem;
+        }
+
+        .section h2 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .section h3 {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section h4 {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin: 1.5rem 0 0.5rem 0;
+        }
+
+        /* Code Blocks */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        code {
+            background: var(--code-bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        th {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        tr:nth-child(even) {
+            background: var(--light-bg);
+        }
+
+        tr:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--secondary-color);
+        }
+
+        .feature-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Architecture Diagram */
+        .architecture-diagram {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            text-align: center;
+            font-family: monospace;
+            line-height: 2;
+            border: 2px solid var(--accent-color);
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Key-Value Pairs */
+        .kv-pair {
+            display: flex;
+            margin-bottom: 0.5rem;
+        }
+
+        .kv-key {
+            font-weight: 600;
+            color: var(--primary-color);
+            min-width: 150px;
+        }
+
+        .kv-value {
+            color: var(--text-color);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0.2rem 0.2rem 0.2rem 0;
+        }
+
+        .badge.primary {
+            background: var(--primary-color);
+        }
+
+        .badge.secondary {
+            background: var(--secondary-color);
+        }
+
+        /* API Endpoints */
+        .endpoint {
+            background: var(--white);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .endpoint-header {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 1rem;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .endpoint-body {
+            padding: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+
+            .sidebar {
+                height: auto;
+                position: static;
+                padding: 1rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+                height: auto;
+            }
+
+            .header {
+                margin: -1rem -1rem 2rem -1rem;
+                padding: 1.5rem 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .nav-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .nav-menu li {
+                margin-bottom: 0;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar {
+                display: none;
+            }
+
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding: 0;
+                height: auto;
+            }
+
+            .header {
+                margin: 0;
+                break-inside: avoid;
+            }
+        }
+
+        /* Syntax Highlighting */
+        .language-javascript { color: #f7df1e; }
+        .language-typescript { color: #3178c6; }
+        .language-json { color: #ff6b6b; }
+        .language-bash { color: #4ade80; }
+        .language-dockerfile { color: #0db7ed; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <h1>🌾 Crop Calendar Documentation</h1>
+            <ul class="nav-menu">
+                <li><a href="#overview">🎯 Project Overview</a></li>
+                <li><a href="#architecture">🏗️ Architecture & Tech Stack</a></li>
+                <li><a href="#apis">🌐 External APIs</a></li>
+                <li><a href="#data-models">📊 Data Models</a></li>
+                <li><a href="#backend">⚙️ Backend Services</a></li>
+                <li><a href="#frontend">🎨 Frontend Components</a></li>
+                <li><a href="#features">✨ Features</a></li>
+                <li><a href="#deployment">🚀 Deployment</a></li>
+                <li><a href="#development">🛠️ Development Setup</a></li>
+                <li><a href="#api-docs">📖 API Documentation</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1>🌾 Crop Calendar Application</h1>
+                <div class="meta">
+                    <strong>Last Updated:</strong> July 23, 2025 &nbsp;|&nbsp;
+                    <strong>Version:</strong> 1.0.0 &nbsp;|&nbsp;
+                    <span class="badge">Production Ready</span>
+                </div>
+            </header>
+
+            <!-- Project Overview -->
+            <section id="overview" class="section">
+                <h2>🎯 Project Overview</h2>
+                <p>The <strong>Crop Calendar Application</strong> is a full-stack agricultural advisory platform that generates personalized crop calendars using real-time satellite data, weather information, and comprehensive agricultural databases. The application provides farmers with data-driven insights for optimal crop planning, fertilization schedules, and harvest timing.</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🛰️ Satellite Data Integration</h4>
+                        <p>Real-time vegetation indices, soil moisture, and weather data</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📅 Personalized Crop Calendars</h4>
+                        <p>Custom planting, fertilization, and harvesting schedules</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌍 Location-Based Agriculture</h4>
+                        <p>GPS or manual coordinate input for precise data</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📱 Responsive Design</h4>
+                        <p>Mobile-first approach with adaptive UI</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔬 Agricultural Intelligence</h4>
+                        <p>Data-driven recommendations and risk assessments</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Architecture & Technology Stack -->
+            <section id="architecture" class="section">
+                <h2>🏗️ Architecture & Technology Stack</h2>
+                
+                <h3>System Architecture</h3>
+                <div class="architecture-diagram">
+                    <div>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐</div>
+                    <div>│   Frontend      │    │    Backend      │    │  External APIs  │</div>
+                    <div>│   React/TS      │◄──►│   Node.js/      │◄──►│  NASA, Weather  │</div>
+                    <div>│   Material-UI   │    │   Express       │    │  Satellite Data │</div>
+                    <div>└─────────────────┘    └─────────────────┘    └─────────────────┘</div>
+                    <div>         │                       │                       │</div>
+                    <div>         ▼                       ▼                       ▼</div>
+                    <div>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐</div>
+                    <div>│  Browser Store  │    │  JSON Database  │    │  Third-party    │</div>
+                    <div>│  Context API    │    │  Crop Data      │    │  Services       │</div>
+                    <div>└─────────────────┘    └─────────────────┘    └─────────────────┘</div>
+                </div>
+
+                <h3>Frontend Technology Stack</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Technology</th>
+                            <th>Version</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Framework</strong></td>
+                            <td>React</td>
+                            <td>19.1.0</td>
+                            <td>Core UI framework</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Language</strong></td>
+                            <td>TypeScript</td>
+                            <td>Latest</td>
+                            <td>Type safety and development experience</td>
+                        </tr>
+                        <tr>
+                            <td><strong>UI Library</strong></td>
+                            <td>Material-UI (MUI)</td>
+                            <td>7.2.0</td>
+                            <td>Component library and design system</td>
+                        </tr>
+                        <tr>
+                            <td><strong>State Management</strong></td>
+                            <td>React Context API</td>
+                            <td>Built-in</td>
+                            <td>Global state management</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Routing</strong></td>
+                            <td>React Router</td>
+                            <td>7.7.0</td>
+                            <td>Client-side navigation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HTTP Client</strong></td>
+                            <td>Axios</td>
+                            <td>1.10.0</td>
+                            <td>API communication</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date Handling</strong></td>
+                            <td>Day.js</td>
+                            <td>1.11.13</td>
+                            <td>Date manipulation and formatting</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Charts</strong></td>
+                            <td>Recharts</td>
+                            <td>3.1.0</td>
+                            <td>Data visualization</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Maps</strong></td>
+                            <td>React Leaflet</td>
+                            <td>5.0.0</td>
+                            <td>Interactive maps</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Styling</strong></td>
+                            <td>Emotion</td>
+                            <td>11.14.0</td>
+                            <td>CSS-in-JS styling</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Backend Technology Stack</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Technology</th>
+                            <th>Version</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Runtime</strong></td>
+                            <td>Node.js</td>
+                            <td>Latest</td>
+                            <td>Server runtime environment</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Framework</strong></td>
+                            <td>Express.js</td>
+                            <td>4.18.2</td>
+                            <td>Web application framework</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Language</strong></td>
+                            <td>JavaScript (ES6+)</td>
+                            <td>Latest</td>
+                            <td>Server-side development</td>
+                        </tr>
+                        <tr>
+                            <td><strong>HTTP Client</strong></td>
+                            <td>Axios</td>
+                            <td>1.4.0</td>
+                            <td>External API communication</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Validation</strong></td>
+                            <td>Express Validator</td>
+                            <td>7.0.1</td>
+                            <td>Input validation and sanitization</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security</strong></td>
+                            <td>Helmet</td>
+                            <td>7.0.0</td>
+                            <td>Security middleware</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CORS</strong></td>
+                            <td>CORS</td>
+                            <td>2.8.5</td>
+                            <td>Cross-origin resource sharing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Logging</strong></td>
+                            <td>Morgan</td>
+                            <td>1.10.0</td>
+                            <td>HTTP request logging</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Date Library</strong></td>
+                            <td>Moment.js</td>
+                            <td>2.29.4</td>
+                            <td>Date manipulation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Environment</strong></td>
+                            <td>Dotenv</td>
+                            <td>16.3.1</td>
+                            <td>Environment variable management</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Scheduling</strong></td>
+                            <td>Node-cron</td>
+                            <td>3.0.2</td>
+                            <td>Task scheduling</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- External APIs & Data Sources -->
+            <section id="apis" class="section">
+                <h2>🌐 External APIs & Data Sources</h2>
+                
+                <h3>Primary Data Sources</h3>
+                
+                <div class="card">
+                    <h4>1. NASA Earth API 🛰️</h4>
+                    <div class="kv-pair">
+                        <div class="kv-key">Purpose:</div>
+                        <div class="kv-value">Satellite imagery and vegetation indices</div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Endpoint:</div>
+                        <div class="kv-value"><code>https://api.nasa.gov/planetary/earth</code></div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Data Retrieved:</div>
+                        <div class="kv-value">
+                            <ul>
+                                <li>NDVI (Normalized Difference Vegetation Index)</li>
+                                <li>EVI (Enhanced Vegetation Index)</li>
+                                <li>Satellite imagery for location analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">API Key:</div>
+                        <div class="kv-value">Required (<code>NASA_API_KEY</code>)</div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Rate Limits:</div>
+                        <div class="kv-value">1,000 requests/hour (Demo key: 30/hour)</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>2. OpenWeatherMap API 🌤️</h4>
+                    <div class="kv-pair">
+                        <div class="kv-key">Purpose:</div>
+                        <div class="kv-value">Real-time weather data and forecasts</div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Endpoint:</div>
+                        <div class="kv-value"><code>https://api.openweathermap.org/data/2.5</code></div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Data Retrieved:</div>
+                        <div class="kv-value">
+                            <ul>
+                                <li>Current weather conditions</li>
+                                <li>7-day weather forecast</li>
+                                <li>Historical weather data</li>
+                                <li>Precipitation and humidity levels</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">API Key:</div>
+                        <div class="kv-value">Required (<code>OPENWEATHER_API_KEY</code>)</div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Rate Limits:</div>
+                        <div class="kv-value">60 calls/minute (Free tier)</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h4>3. Simulated Satellite Data 🔬</h4>
+                    <div class="kv-pair">
+                        <div class="kv-key">Purpose:</div>
+                        <div class="kv-value">Demo and development fallback</div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Implementation:</div>
+                        <div class="kv-value">Algorithm-generated realistic data</div>
+                    </div>
+                    <div class="kv-pair">
+                        <div class="kv-key">Data Points:</div>
+                        <div class="kv-value">
+                            <ul>
+                                <li>Vegetation health indices</li>
+                                <li>Soil moisture percentages</li>
+                                <li>Climate conditions</li>
+                                <li>Agricultural risk factors</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>API Integration Architecture</h3>
+                <pre><code class="language-javascript">// Example API Service Structure
+class SatelliteDataService {
+  constructor() {
+    this.nasaApiKey = process.env.NASA_API_KEY;
+    this.openWeatherApiKey = process.env.OPENWEATHER_API_KEY;
+  }
+
+  async getSatelliteData(location) {
+    // Multi-source data aggregation
+    const weatherData = await this.getWeatherData(location);
+    const vegetationData = await this.getVegetationData(location);
+    const soilData = await this.getSoilMoistureData(location);
+    
+    return this.aggregateData([weatherData, vegetationData, soilData]);
+  }
+}</code></pre>
+            </section>
+
+            <!-- Data Models & Types -->
+            <section id="data-models" class="section">
+                <h2>📊 Data Models & Types</h2>
+                
+                <h3>Core Data Structures</h3>
+                
+                <h4>Location Model</h4>
+                <pre><code class="language-typescript">interface Location {
+  latitude: number;
+  longitude: number;
+  address?: string;
+  timezone?: string;
+}</code></pre>
+
+                <h4>Satellite Data Model</h4>
+                <pre><code class="language-typescript">interface SatelliteData {
+  vegetationIndex: {
+    ndvi: number;          // -1 to 1 (vegetation health)
+    evi: number;           // Enhanced vegetation index
+    lastCalculated: string;
+  };
+  soilMoisture: {
+    percentage: number;    // 0-100%
+    status: string;        // 'dry' | 'optimal' | 'wet'
+    depth: string;         // Measurement depth
+  };
+  temperature: {
+    current: number;       // Current temperature (°C)
+    min: number;          // Daily minimum
+    max: number;          // Daily maximum
+    unit: string;         // Temperature unit
+  };
+  precipitation: {
+    last7Days: number;     // mm of rainfall
+    last30Days: number;    // mm of rainfall
+    unit: string;         // Measurement unit
+  };
+  humidity: number;        // Relative humidity %
+  windSpeed: number;       // Wind speed (km/h)
+  cloudCover: number;      // Cloud coverage %
+  sunlightHours: number;   // Daily sunlight hours
+  lastUpdated: string;     // ISO timestamp
+  location: Location;
+  dataSource: string;      // API source identifier
+  confidence: number;      // Data reliability (0-1)
+}</code></pre>
+
+                <h4>Crop Information Model</h4>
+                <pre><code class="language-typescript">interface CropInfo {
+  name: string;
+  scientificName: string;
+  category: string;        // 'Cereal' | 'Vegetable' | 'Legume' | etc.
+  description: string;
+  growingPeriod: number;   // Days from planting to harvest
+  difficulty: string;      // 'Easy' | 'Medium' | 'Hard'
+  plantingSeasons: {
+    northern: PlantingWindow[];
+    southern: PlantingWindow[];
+  };
+  requirements: {
+    temperature: Range;
+    soilMoisture: Range;
+    soilPH: Range;
+  };
+  growthStages: GrowthStage[];
+  fertilizationSchedule: FertilizationEvent[];
+  irrigationSchedule: IrrigationEvent[];
+  pestManagement: PestEvent[];
+  recommendations: Recommendation[];
+}</code></pre>
+
+                <h4>Growth Stage Model</h4>
+                <pre><code class="language-typescript">interface GrowthStage {
+  name: string;           // 'Germination' | 'Vegetative' | etc.
+  duration: number;       // Days in this stage
+  description: string;
+  activities: string[];   // Required farming activities
+  careInstructions: string[];
+  expectedSigns: string[];
+  criticalFactors: string[];
+  riskFactors: RiskFactor[];
+}</code></pre>
+
+                <h3>Supported Crop Database</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Crop</th>
+                            <th>Scientific Name</th>
+                            <th>Growing Period</th>
+                            <th>Difficulty</th>
+                            <th>Seasons</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Wheat</strong></td>
+                            <td>Triticum aestivum</td>
+                            <td>120 days</td>
+                            <td><span class="badge">Medium</span></td>
+                            <td>Winter/Spring</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Rice</strong></td>
+                            <td>Oryza sativa</td>
+                            <td>150 days</td>
+                            <td><span class="badge">Medium</span></td>
+                            <td>Summer/Monsoon</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Corn</strong></td>
+                            <td>Zea mays</td>
+                            <td>100 days</td>
+                            <td><span class="badge secondary">Easy</span></td>
+                            <td>Spring/Summer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tomato</strong></td>
+                            <td>Solanum lycopersicum</td>
+                            <td>90 days</td>
+                            <td><span class="badge">Medium</span></td>
+                            <td>Spring/Summer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Soybean</strong></td>
+                            <td>Glycine max</td>
+                            <td>110 days</td>
+                            <td><span class="badge secondary">Easy</span></td>
+                            <td>Late Spring</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cotton</strong></td>
+                            <td>Gossypium hirsutum</td>
+                            <td>180 days</td>
+                            <td><span class="badge primary">Hard</span></td>
+                            <td>Summer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sunflower</strong></td>
+                            <td>Helianthus annuus</td>
+                            <td>90 days</td>
+                            <td><span class="badge secondary">Easy</span></td>
+                            <td>Spring/Summer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Barley</strong></td>
+                            <td>Hordeum vulgare</td>
+                            <td>100 days</td>
+                            <td><span class="badge secondary">Easy</span></td>
+                            <td>Spring/Fall</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Backend Services -->
+            <section id="backend" class="section">
+                <h2>⚙️ Backend Services</h2>
+                
+                <h3>Service Architecture</h3>
+                
+                <div class="card">
+                    <h4>1. Crop Calendar Service 📅</h4>
+                    <pre><code class="language-javascript">class CropCalendarService {
+  // Generates personalized crop calendars
+  async generateCropCalendar(location, cropName, area) {
+    const cropData = this.getCropData(cropName);
+    const satelliteData = await this.getSatelliteData(location);
+    const calendar = this.calculateGrowthSchedule(cropData, satelliteData);
+    return this.enrichWithRecommendations(calendar);
+  }
+}</code></pre>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Calendar generation logic</li>
+                        <li>Growth stage calculations</li>
+                        <li>Fertilization scheduling</li>
+                        <li>Risk assessment</li>
+                        <li>Yield predictions</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>2. Satellite Data Service 🛰️</h4>
+                    <pre><code class="language-javascript">class SatelliteDataService {
+  // Integrates multiple data sources
+  async getSatelliteData(location) {
+    const [weather, vegetation, soil] = await Promise.all([
+      this.getWeatherData(location),
+      this.getVegetationData(location),
+      this.getSoilMoistureData(location)
+    ]);
+    return this.aggregateAndValidate({ weather, vegetation, soil });
+  }
+}</code></pre>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>External API integration</li>
+                        <li>Data aggregation and validation</li>
+                        <li>Caching and optimization</li>
+                        <li>Fallback data simulation</li>
+                    </ul>
+                </div>
+
+                <h3>API Endpoints</h3>
+                
+                <h4>Crop Management</h4>
+                <div class="endpoint">
+                    <div class="endpoint-header">GET /api/crops</div>
+                    <div class="endpoint-body">List all available crops</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-header">GET /api/crops/:name</div>
+                    <div class="endpoint-body">Get specific crop details</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-header">POST /api/crops/search</div>
+                    <div class="endpoint-body">Search crops by criteria</div>
+                </div>
+
+                <h4>Calendar Generation</h4>
+                <div class="endpoint">
+                    <div class="endpoint-header">POST /api/calendar/generate</div>
+                    <div class="endpoint-body">Generate crop calendar</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-header">GET /api/calendar/:id</div>
+                    <div class="endpoint-body">Retrieve generated calendar</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-header">PUT /api/calendar/:id</div>
+                    <div class="endpoint-body">Update calendar parameters</div>
+                </div>
+
+                <h4>Satellite Data</h4>
+                <div class="endpoint">
+                    <div class="endpoint-header">GET /api/satellite-data</div>
+                    <div class="endpoint-body">Get current satellite data</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-header">POST /api/satellite-data/location</div>
+                    <div class="endpoint-body">Get data for specific location</div>
+                </div>
+                <div class="endpoint">
+                    <div class="endpoint-header">GET /api/satellite-data/history</div>
+                    <div class="endpoint-body">Historical data trends</div>
+                </div>
+            </section>
+
+            <!-- Frontend Components -->
+            <section id="frontend" class="section">
+                <h2>🎨 Frontend Components</h2>
+                
+                <h3>Component Hierarchy</h3>
+                <div class="architecture-diagram">
+                    <div>App</div>
+                    <div>├── Router</div>
+                    <div>│   ├── HomePage</div>
+                    <div>│   │   ├── Hero Section</div>
+                    <div>│   │   ├── Features Overview</div>
+                    <div>│   │   └── Crops Showcase</div>
+                    <div>│   └── CropCalendarPage</div>
+                    <div>│       ├── LocationStep</div>
+                    <div>│       ├── CropSelectionStep</div>
+                    <div>│       ├── AreaStep</div>
+                    <div>│       └── CalendarResults</div>
+                    <div>│           ├── Timeline View</div>
+                    <div>│           └── Calendar View</div>
+                    <div>├── Header (Responsive Navigation)</div>
+                    <div>└── Context Providers</div>
+                    <div>    └── CropCalendarContext</div>
+                </div>
+
+                <h3>Key Components</h3>
+                
+                <div class="card">
+                    <h4>1. LocationStep Component 📍</h4>
+                    <pre><code class="language-typescript">const LocationStep: React.FC = () => {
+  // GPS integration and manual coordinate input
+  const getCurrentLocation = useCallback(() => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => updateLocation(position.coords),
+      (error) => handleLocationError(error)
+    );
+  }, []);
+};</code></pre>
+                    <p><strong>Features:</strong></p>
+                    <ul>
+                        <li>GPS location detection</li>
+                        <li>Manual coordinate input</li>
+                        <li>Address validation</li>
+                        <li>Interactive map integration</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>2. CropSelectionStep Component 🌱</h4>
+                    <pre><code class="language-typescript">const CropSelectionStep: React.FC = () => {
+  // Dynamic crop filtering and selection
+  const filteredCrops = useMemo(() => 
+    crops.filter(crop => 
+      crop.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ), [crops, searchTerm]
+  );
+};</code></pre>
+                    <p><strong>Features:</strong></p>
+                    <ul>
+                        <li>Visual crop cards with emojis</li>
+                        <li>Search and filtering</li>
+                        <li>Detailed crop information</li>
+                        <li>Responsive grid layout</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>3. AreaStep Component 📏</h4>
+                    <pre><code class="language-typescript">const AreaStep: React.FC = () => {
+  // Multi-unit area input with validation
+  const convertToHectares = useCallback((value: number, unit: string) => {
+    const conversions = { hectares: 1, acres: 0.404686, sqm: 0.0001 };
+    return value * conversions[unit];
+  }, []);
+};</code></pre>
+                    <p><strong>Features:</strong></p>
+                    <ul>
+                        <li>Multi-unit support (hectares, acres, sq meters)</li>
+                        <li>Real-time validation</li>
+                        <li>Unit conversion</li>
+                        <li>Input sanitization</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h4>4. CalendarResults Component 📅</h4>
+                    <pre><code class="language-typescript">const CalendarResults: React.FC = () => {
+  // Dual-view calendar display
+  const [viewMode, setViewMode] = useState&lt;'timeline' | 'calendar'&gt;('timeline');
+  
+  const renderTimelineView = () => (
+    // Timeline visualization of growth stages
+  );
+  
+  const renderCalendarView = () => (
+    // Month-by-month calendar grid
+  );
+};</code></pre>
+                    <p><strong>Features:</strong></p>
+                    <ul>
+                        <li>Timeline and calendar views</li>
+                        <li>Interactive growth stages</li>
+                        <li>Color-coded activities</li>
+                        <li>Tooltips and detailed information</li>
+                    </ul>
+                </div>
+
+                <h3>Responsive Design System</h3>
+                
+                <h4>Breakpoints</h4>
+                <pre><code class="language-typescript">const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,      // Mobile
+      sm: 600,    // Tablet
+      md: 900,    // Small desktop
+      lg: 1200,   // Desktop
+      xl: 1536,   // Large desktop
+    },
+  },
+});</code></pre>
+
+                <h4>Mobile-First Approach</h4>
+                <ul>
+                    <li>Hamburger navigation menu for mobile</li>
+                    <li>Touch-friendly interface elements</li>
+                    <li>Responsive grid systems</li>
+                    <li>Adaptive typography scaling</li>
+                </ul>
+            </section>
+
+            <!-- Features & Functionality -->
+            <section id="features" class="section">
+                <h2>✨ Features & Functionality</h2>
+                
+                <h3>Core Features</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🌍 Smart Location Detection</h4>
+                        <ul>
+                            <li><strong>GPS Integration:</strong> Automatic location detection using browser geolocation</li>
+                            <li><strong>Manual Input:</strong> Latitude/longitude coordinate entry</li>
+                            <li><strong>Address Search:</strong> Future integration with geocoding services</li>
+                            <li><strong>Location Validation:</strong> Coordinate bounds checking</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>🌾 Comprehensive Crop Database</h4>
+                        <ul>
+                            <li><strong>8 Major Crops:</strong> Wheat, rice, corn, tomato, soybean, cotton, sunflower, barley</li>
+                            <li><strong>Detailed Information:</strong> Scientific names, growing periods, difficulty levels</li>
+                            <li><strong>Growth Stages:</strong> 6 distinct phases with detailed descriptions</li>
+                            <li><strong>Seasonal Awareness:</strong> Northern and southern hemisphere planting windows</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>📅 Intelligent Calendar Generation</h4>
+                        <ul>
+                            <li><strong>Data-Driven Scheduling:</strong> Based on satellite data and crop requirements</li>
+                            <li><strong>Fertilization Plans:</strong> NPK ratios, timing, and application methods</li>
+                            <li><strong>Irrigation Schedules:</strong> Water requirements by growth stage</li>
+                            <li><strong>Pest Management:</strong> Preventive measures and treatment schedules</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>📊 Advanced Data Visualization</h4>
+                        <ul>
+                            <li><strong>Timeline View:</strong> Linear progression of growth stages</li>
+                            <li><strong>Calendar View:</strong> Month-by-month activity grid</li>
+                            <li><strong>Color Coding:</strong> Visual stage identification</li>
+                            <li><strong>Interactive Elements:</strong> Tooltips and detailed information</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h4>📱 Responsive User Experience</h4>
+                        <ul>
+                            <li><strong>Mobile-First Design:</strong> Optimized for all device sizes</li>
+                            <li><strong>Progressive Web App:</strong> Installable and offline-capable</li>
+                            <li><strong>Fast Loading:</strong> Optimized performance and caching</li>
+                            <li><strong>Accessibility:</strong> WCAG compliant interface</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Advanced Functionality</h3>
+                
+                <h4>Risk Assessment Engine</h4>
+                <pre><code class="language-javascript">const assessRisks = (satelliteData, cropRequirements) => {
+  const risks = [];
+  
+  if (satelliteData.soilMoisture.percentage < cropRequirements.soilMoisture.minimum) {
+    risks.push({
+      type: 'drought',
+      severity: 'high',
+      recommendation: 'Increase irrigation frequency'
+    });
+  }
+  
+  return risks;
+};</code></pre>
+
+                <h4>Yield Prediction Model</h4>
+                <ul>
+                    <li>Weather pattern analysis</li>
+                    <li>Soil condition evaluation</li>
+                    <li>Historical data correlation</li>
+                    <li>Machine learning integration potential</li>
+                </ul>
+            </section>
+
+            <!-- Deployment & Configuration -->
+            <section id="deployment" class="section">
+                <h2>🚀 Deployment & Configuration</h2>
+                
+                <h3>Environment Variables</h3>
+                
+                <h4>Backend Configuration</h4>
+                <pre><code class="language-bash"># Server Configuration
+PORT=5001
+NODE_ENV=production
+
+# API Keys
+NASA_API_KEY=your_nasa_api_key_here
+OPENWEATHER_API_KEY=your_openweather_api_key_here
+
+# Database Configuration
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=crop_calendar
+
+# Security
+JWT_SECRET=your_jwt_secret_here
+CORS_ORIGIN=https://yourfrontend.com</code></pre>
+
+                <h4>Frontend Configuration</h4>
+                <pre><code class="language-bash"># API Configuration
+REACT_APP_API_BASE_URL=https://api.cropcalendar.com
+REACT_APP_MAPS_API_KEY=your_maps_api_key_here
+
+# Feature Flags
+REACT_APP_ENABLE_OFFLINE_MODE=true
+REACT_APP_DEBUG_MODE=false</code></pre>
+
+                <h3>Docker Configuration</h3>
+                
+                <h4>Backend Dockerfile</h4>
+                <pre><code class="language-dockerfile">FROM node:18-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+EXPOSE 5001
+CMD ["npm", "start"]</code></pre>
+
+                <h4>Frontend Dockerfile</h4>
+                <pre><code class="language-dockerfile">FROM node:18-alpine as build
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 80</code></pre>
+
+                <h3>Production Deployment</h3>
+                
+                <h4>Recommended Architecture</h4>
+                <div class="architecture-diagram">
+                    <div>Internet → Load Balancer → Frontend (Nginx) → Backend (Node.js) → Database</div>
+                    <div>                      ↓</div>
+                    <div>               CDN (Static Assets)</div>
+                </div>
+
+                <h4>Performance Optimizations</h4>
+                <ul>
+                    <li><strong>Frontend:</strong> Code splitting, lazy loading, asset optimization</li>
+                    <li><strong>Backend:</strong> Response caching, database indexing, API rate limiting</li>
+                    <li><strong>Infrastructure:</strong> CDN integration, horizontal scaling, monitoring</li>
+                </ul>
+            </section>
+
+            <!-- Development Setup -->
+            <section id="development" class="section">
+                <h2>🛠️ Development Setup</h2>
+                
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Node.js 18+ and npm</li>
+                    <li>Git version control</li>
+                    <li>Code editor (VS Code recommended)</li>
+                    <li>Browser with developer tools</li>
+                </ul>
+
+                <h3>Quick Start</h3>
+                
+                <h4>1. Clone Repository</h4>
+                <pre><code class="language-bash">git clone https://github.com/yourusername/crop-calendar.git
+cd crop-calendar</code></pre>
+
+                <h4>2. Backend Setup</h4>
+                <pre><code class="language-bash">cd backend
+npm install
+cp .env.example .env
+# Edit .env with your API keys
+npm run dev
+# Backend running on http://localhost:5001</code></pre>
+
+                <h4>3. Frontend Setup</h4>
+                <pre><code class="language-bash">cd frontend
+npm install
+npm start
+# Frontend running on http://localhost:3000</code></pre>
+
+                <h4>4. Development Workflow</h4>
+                <pre><code class="language-bash"># Run both simultaneously
+npm run dev  # From root directory</code></pre>
+
+                <h3>Testing Strategy</h3>
+                
+                <h4>Backend Testing</h4>
+                <pre><code class="language-bash"># Unit tests
+npm test
+
+# Integration tests
+npm run test:integration
+
+# API testing
+npm run test:api</code></pre>
+
+                <h4>Frontend Testing</h4>
+                <pre><code class="language-bash"># Component tests
+npm test
+
+# E2E tests
+npm run test:e2e
+
+# Visual regression tests
+npm run test:visual</code></pre>
+            </section>
+
+            <!-- API Documentation -->
+            <section id="api-docs" class="section">
+                <h2>📖 API Documentation</h2>
+                
+                <h3>Authentication</h3>
+                <p>Currently, the API is open for demo purposes. Production deployment should implement:</p>
+                <ul>
+                    <li>JWT-based authentication</li>
+                    <li>API key management</li>
+                    <li>Rate limiting per user</li>
+                </ul>
+
+                <h3>Request/Response Format</h3>
+                
+                <h4>Standard Success Response</h4>
+                <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    // Response data
+  },
+  "message": "Operation completed successfully",
+  "timestamp": "2025-07-23T10:30:00Z"
+}</code></pre>
+
+                <h4>Standard Error Response</h4>
+                <pre><code class="language-json">{
+  "success": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid input parameters",
+    "details": [
+      {
+        "field": "latitude",
+        "message": "Must be between -90 and 90"
+      }
+    ]
+  },
+  "timestamp": "2025-07-23T10:30:00Z"
+}</code></pre>
+
+                <h3>Detailed Endpoints</h3>
+                
+                <div class="card">
+                    <h4>POST /api/calendar/generate</h4>
+                    <p>Generates a personalized crop calendar.</p>
+                    
+                    <h5>Request Body:</h5>
+                    <pre><code class="language-json">{
+  "location": {
+    "latitude": 40.7128,
+    "longitude": -74.0060
+  },
+  "crop": "wheat",
+  "area": {
+    "value": 5.0,
+    "unit": "hectares"
+  },
+  "plantingDate": "2025-10-15"
+}</code></pre>
+
+                    <h5>Response:</h5>
+                    <pre><code class="language-json">{
+  "success": true,
+  "data": {
+    "calendar": {
+      "cropInfo": {
+        "name": "wheat",
+        "scientificName": "Triticum aestivum",
+        "growingPeriod": 120
+      },
+      "schedule": {
+        "plantingDate": "2025-10-15",
+        "harvestDate": "2026-02-12",
+        "growthStages": [
+          {
+            "name": "Germination",
+            "startDate": "2025-10-15",
+            "endDate": "2025-10-22",
+            "activities": ["Ensure adequate moisture", "Monitor for pests"],
+            "stage": "germination"
+          }
+        ]
+      },
+      "recommendations": [
+        {
+          "type": "fertilization",
+          "priority": "high",
+          "description": "Apply NPK fertilizer",
+          "scheduledDate": "2025-10-29"
+        }
+      ]
+    }
+  }
+}</code></pre>
+                </div>
+
+                <h3>Technical Considerations</h3>
+                
+                <h4>Scalability</h4>
+                <ul>
+                    <li><strong>Horizontal Scaling:</strong> Stateless backend design for load balancing</li>
+                    <li><strong>Database Optimization:</strong> Indexing for crop data queries</li>
+                    <li><strong>Caching Strategy:</strong> Redis for satellite data caching</li>
+                    <li><strong>CDN Integration:</strong> Static asset delivery optimization</li>
+                </ul>
+
+                <h4>Security</h4>
+                <ul>
+                    <li><strong>Input Validation:</strong> Server-side validation for all inputs</li>
+                    <li><strong>CORS Configuration:</strong> Restricted origins in production</li>
+                    <li><strong>Rate Limiting:</strong> API endpoint protection</li>
+                    <li><strong>Data Sanitization:</strong> XSS and injection prevention</li>
+                </ul>
+
+                <h4>Performance</h4>
+                <ul>
+                    <li><strong>Lazy Loading:</strong> Component-based code splitting</li>
+                    <li><strong>Image Optimization:</strong> WebP format with fallbacks</li>
+                    <li><strong>API Response Caching:</strong> Satellite data caching (5-minute TTL)</li>
+                    <li><strong>Bundle Analysis:</strong> Regular bundle size monitoring</li>
+                </ul>
+
+                <h4>Monitoring & Analytics</h4>
+                <ul>
+                    <li><strong>Error Tracking:</strong> Integration with error monitoring services</li>
+                    <li><strong>Performance Metrics:</strong> Core Web Vitals monitoring</li>
+                    <li><strong>User Analytics:</strong> Privacy-compliant usage tracking</li>
+                    <li><strong>API Monitoring:</strong> Uptime and response time tracking</li>
+                </ul>
+            </section>
+
+            <!-- Footer -->
+            <footer style="margin-top: 4rem; padding: 2rem 0; border-top: 2px solid var(--accent-color); text-align: center; color: var(--secondary-color);">
+                <p><strong>🌾 Crop Calendar Application - Technical Documentation</strong></p>
+                <p><em>This documentation is maintained alongside the codebase and updated with each release. For the most current information, please refer to the latest version in the repository.</em></p>
+                <p style="margin-top: 1rem;">
+                    <a href="#overview" style="color: var(--primary-color); text-decoration: none;">📚 Development Resources</a> |
+                    <a href="#apis" style="color: var(--primary-color); text-decoration: none;">🌐 External APIs</a> |
+                    <a href="#deployment" style="color: var(--primary-color); text-decoration: none;">🚀 Deployment Guide</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active navigation item
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('.section');
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.style.backgroundColor = '';
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.style.backgroundColor = 'rgba(255,255,255,0.3)';
+                }
+            });
+        });
+
+        // Print functionality
+        function printDocumentation() {
+            window.print();
+        }
+
+        // Copy code functionality
+        document.querySelectorAll('pre code').forEach(block => {
+            block.addEventListener('click', () => {
+                navigator.clipboard.writeText(block.textContent);
+                // You could add a tooltip here showing "Copied!"
+            });
+        });
+
+        // Mobile responsive navigation
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        
+        // Add mobile menu toggle if needed
+        if (window.innerWidth <= 768) {
+            // Mobile-specific functionality can be added here
+        }
+    </script>
+</body>
+</html>
