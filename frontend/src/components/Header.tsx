@@ -13,7 +13,16 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Agriculture, Home, CalendarToday, Satellite, Menu as MenuIcon } from '@mui/icons-material';
+import { 
+  Agriculture, 
+  Home, 
+  CalendarToday, 
+  Menu as MenuIcon, 
+  Cloud,
+  Nature,
+  Emergency
+} from '@mui/icons-material';
+import { designTokens } from '../theme/theme';
 
 const Header: React.FC = () => {
   const location = useLocation();
@@ -34,34 +43,36 @@ const Header: React.FC = () => {
       position="static" 
       elevation={0}
       sx={{ 
-        background: 'linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%)',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
+        background: `linear-gradient(135deg, ${designTokens.colors.primary[600]} 0%, ${designTokens.colors.primary[700]} 50%, ${designTokens.colors.primary[800]} 100%)`,
+        borderBottom: `1px solid ${designTokens.colors.primary[500]}`,
+        boxShadow: designTokens.shadows.sm,
       }}
     >
       <Container maxWidth="lg">
-        <Toolbar sx={{ px: 0, py: 1 }}>
+        <Toolbar sx={{ px: 0, py: designTokens.spacing[2] }}>
           {/* Logo and Title */}
           <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
             <Box
               sx={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: { xs: 0.5, sm: 1 },
-                p: { xs: 0.5, sm: 1 },
-                borderRadius: 2,
+                gap: { xs: designTokens.spacing[1], sm: designTokens.spacing[2] },
+                p: { xs: designTokens.spacing[1], sm: designTokens.spacing[2] },
+                borderRadius: designTokens.borderRadius.lg,
                 background: 'rgba(255,255,255,0.1)',
                 backdropFilter: 'blur(10px)',
               }}
             >
-              <Agriculture sx={{ fontSize: { xs: 24, sm: 32 }, color: '#81C784' }} />
+              <Agriculture sx={{ fontSize: { xs: 24, sm: 32 }, color: designTokens.colors.primary[200] }} />
               <Box>
                 <Typography 
                   variant="h6" 
                   component="div" 
                   sx={{ 
-                    fontWeight: 700,
-                    fontSize: { xs: '1rem', sm: '1.3rem' },
-                    lineHeight: 1.2
+                    fontWeight: designTokens.typography.fontWeight.bold,
+                    fontSize: { xs: designTokens.typography.fontSize.lg, sm: designTokens.typography.fontSize.xl },
+                    lineHeight: designTokens.typography.lineHeight.tight,
+                    color: 'white',
                   }}
                 >
                   🌾 Crop Calendar
@@ -69,14 +80,15 @@ const Header: React.FC = () => {
                 <Typography 
                   variant="caption" 
                   sx={{ 
-                    opacity: 0.8,
-                    fontSize: { xs: '0.65rem', sm: '0.75rem' },
+                    opacity: 0.9,
+                    fontSize: { xs: designTokens.typography.fontSize.xs, sm: designTokens.typography.fontSize.sm },
                     display: { xs: 'none', sm: 'flex' },
                     alignItems: 'center',
-                    gap: 0.5
+                    gap: designTokens.spacing[1],
+                    color: designTokens.colors.primary[100],
                   }}
                 >
-                  <Satellite sx={{ fontSize: 12 }} />
+                  <Agriculture sx={{ fontSize: 12 }} />
                   Satellite-Powered Agriculture
                 </Typography>
               </Box>
@@ -154,6 +166,22 @@ const Header: React.FC = () => {
                   <CalendarToday sx={{ fontSize: 20 }} />
                   Calendar
                 </MenuItem>
+                <MenuItem
+                  component={Link}
+                  to="/weather"
+                  onClick={handleMenuClose}
+                  sx={{
+                    bgcolor: location.pathname === '/weather' ? 'rgba(255,255,255,0.2)' : 'transparent',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1,
+                    px: 3,
+                    py: 1.5
+                  }}
+                >
+                  <Cloud sx={{ fontSize: 20 }} />
+                  Weather
+                </MenuItem>
               </Menu>
             </>
           ) : (
@@ -199,6 +227,27 @@ const Header: React.FC = () => {
                 }}
               >
                 Calendar
+              </Button>
+              <Button
+                component={Link}
+                to="/weather"
+                color="inherit"
+                startIcon={<Cloud />}
+                sx={{
+                  bgcolor: location.pathname === '/weather' ? 'rgba(255,255,255,0.2)' : 'transparent',
+                  borderRadius: 2,
+                  px: 3,
+                  py: 1,
+                  fontWeight: 600,
+                  border: location.pathname === '/weather' ? '1px solid rgba(255,255,255,0.3)' : '1px solid transparent',
+                  '&:hover': { 
+                    bgcolor: 'rgba(255,255,255,0.15)',
+                    border: '1px solid rgba(255,255,255,0.3)'
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                Weather
               </Button>
             </Box>
           )}

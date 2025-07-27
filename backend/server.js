@@ -7,6 +7,10 @@ require('dotenv').config();
 const cropCalendarRoutes = require('./routes/cropCalendar');
 const satelliteDataRoutes = require('./routes/satelliteData');
 const aiRecommendationRoutes = require('./routes/aiRecommendations');
+const sosEmergencyRoutes = require('./routes/sosEmergency');
+const sustainablePracticesRoutes = require('./routes/sustainablePractices');
+const weatherRoutes = require('./routes/weather');
+const governmentSchemesRoutes = require('./routes/governmentSchemes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,6 +26,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/crop-calendar', cropCalendarRoutes);
 app.use('/api/satellite-data', satelliteDataRoutes);
 app.use('/api/ai-recommendations', aiRecommendationRoutes);
+app.use('/api/sos', sosEmergencyRoutes);
+app.use('/api/sustainable-practices', sustainablePracticesRoutes);
+app.use('/api/weather', weatherRoutes);
+app.use('/api/government-schemes', governmentSchemesRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

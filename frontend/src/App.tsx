@@ -8,6 +8,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import CropCalendarPage from './pages/CropCalendarPage';
+import SOSEmergencyPage from './pages/SOSEmergencyPage';
+import SustainablePracticesPage from './pages/SustainablePracticesPage';
+import WeatherPage from './pages/WeatherPage';
+import GovernmentSchemesPage from './pages/GovernmentSchemesPage';
 import { CropCalendarProvider } from './context/CropCalendarContext';
 import { agriculturalTheme } from './theme/theme';
 
@@ -26,6 +30,11 @@ function App() {
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/crop-calendar" element={<CropCalendarPage />} />
+                  <Route path="/sos-emergency" element={<SOSEmergencyPage />} />
+                  <Route path="/sos-emergency/:emergencyId" element={<SOSEmergencyPage />} />
+                  <Route path="/sustainable-practices" element={<SustainablePracticesPage />} />
+                  <Route path="/weather" element={<WeatherPage />} />
+                  <Route path="/government-schemes" element={<GovernmentSchemesPage />} />
                 </Routes>
               </main>
             </div>
